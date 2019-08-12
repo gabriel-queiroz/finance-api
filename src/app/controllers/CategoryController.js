@@ -12,8 +12,9 @@ class CategoryController {
     }
   }
   async listAll (req, res) {
-    const categories = await CategoryModel.find({})
-    return res.send(categories)
+    const expense = await CategoryModel.find({ type: 'EXPENSE' })
+    const recipe = await CategoryModel.find({ type: 'RECIPE' })
+    return res.send({ expense, recipe })
   }
   async update (req, res) {
     const { id } = req.params
