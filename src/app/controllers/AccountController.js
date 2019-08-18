@@ -15,15 +15,15 @@ class AccountController {
     const result = await AccountModel.aggregate([
       {
         $lookup: {
-          from: 'posts',
+          from: 'transactions',
           localField: '_id',
           foreignField: 'account',
-          as: 'posts'
+          as: 'transactions'
         }
       },
       {
         $project: {
-          value: { $sum: '$posts.value' },
+          value: { $sum: '$transactions.value' },
           name: '$name',
           description: '$description'
         }
