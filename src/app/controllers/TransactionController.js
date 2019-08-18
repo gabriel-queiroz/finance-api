@@ -6,16 +6,17 @@ const dayjs = require('dayjs')
 class TransactionController {
   async store (req, res) {
     let { body: transaction } = req
-    const createdAt = new Date(transaction.createdAt)
+    // const createdAt = new Date(transaction.createdAt)
     try {
-      transaction = await TransactionModel.create({ ...transaction, createdAt })
+      transaction = await TransactionModel.create({ ...transaction })
       return res.send(transaction)
     } catch (error) {
       return res.status(400).send(error)
     }
   }
   async list (req, res) {
-    console.log(req.userId)
+    const { userId } = req
+    console.log(userId)
     const { filter } = aqp(req.query)
     const day = dayjs()
     let { AtMonth = day.month() + 1, atYear = day.year() } = filter
@@ -48,13 +49,15 @@ class TransactionController {
             type: 1,
             createdAt: 1,
             category: '$category.name',
-            account: '$account.name'
+            account: '$account.name',
+            user: '$account.user'
           }
         },
         {
           $match: {
             AtMonth: AtMonth,
-            atYear: atYear
+            atYear: atYear,
+            user: ObjectId(userId)
           }
         },
         {
