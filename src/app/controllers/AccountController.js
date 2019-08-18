@@ -12,6 +12,7 @@ class AccountController {
     }
   }
   async listAll (req, res) {
+    const { userId } = req
     const result = await AccountModel.aggregate([
       {
         $lookup: {
@@ -25,7 +26,13 @@ class AccountController {
         $project: {
           value: { $sum: '$transactions.value' },
           name: '$name',
-          description: '$description'
+          description: '$description',
+          user: '$user'
+        }
+      },
+      {
+        $match: {
+          user: ObjectId(userId)
         }
       }
     ])
