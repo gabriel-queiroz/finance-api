@@ -85,6 +85,22 @@ class TransactionController {
       return res.status(400).send(error)
     }
   }
+  async delete (req, res) {
+    const { id } = req.params
+    const { userId: user } = req
+    try {
+      const response = await TransactionModel.findOneAndRemove({
+        _id: id,
+        user
+      })
+      if (!response) {
+        throw new Error('Transação não encontrada')
+}
+      res.status(200).send(response)
+    } catch (error) {
+      return res.status(400).send({ error: 'Transação não encontrada' })
+    }
+  }
 }
 
 module.exports = new TransactionController()

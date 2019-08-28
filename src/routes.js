@@ -44,5 +44,6 @@ routes.put(
   validators.middlewareValidator(validators.TransactionValidator),
   controllers.TransactionController.update
 )
+routes.delete('/api/transactions/:id', controllers.TransactionController.delete)
 
 module.exports = routes
